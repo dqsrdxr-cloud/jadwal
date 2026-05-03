@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)file:///C:/Users/L/Downloads/%D8%AC%D8%AF%D9%88%D9%84%D9%8A-pro.html -->
+<html lang="ar" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>جدولي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./جدولي_files/css2" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0f0f13;
+  --surface:#1a1a22;
+  --surface2:#222230;
+  --surface3:#2a2a3a;
+  --border:#2e2e3e;
+  --border2:#3a3a50;
+  --text:#f0eff8;
+  --text2:#9898b8;
+  --text3:#5a5a78;
+  --accent:#6c63ff;
+  --accent2:#8b84ff;
+  --accent-bg:rgba(108,99,255,0.12);
+  --blue:#4a9eff;
+  --blue-bg:rgba(74,158,255,0.12);
+  --blue-text:#a8d0ff;
+  --green:#3ecf8e;
+  --green-bg:rgba(62,207,142,0.12);
+  --green-text:#90e8c0;
+  --amber:#f5a623;
+  --amber-bg:rgba(245,166,35,0.12);
+  --amber-text:#fad090;
+  --red:#ff5c5c;
+  --red-bg:rgba(255,92,92,0.1);
+  --r:12px;--r-lg:18px;--r-xl:24px;
+}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* SIDEBAR */
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:220px;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;padding:24px 0;}
+.logo{padding:0 20px 28px;border-bottom:1px solid var(--border);margin-bottom:16px;}
+.logo h1{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-0.5px;}
+.logo span{font-size:12px;color:var(--text3);display:block;margin-top:2px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:11px 20px;cursor:pointer;font-size:14px;color:var(--text2);border-right:3px solid transparent;transition:all 0.15s;margin:1px 0;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:var(--accent-bg);color:var(--accent2);border-right-color:var(--accent);}
+.nav-item svg{width:18px;height:18px;flex-shrink:0;}
+.sidebar-footer{margin-top:auto;padding:16px 20px;border-top:1px solid var(--border);}
+.sidebar-footer .day-info{font-size:12px;color:var(--text3);line-height:1.8;}
+.sidebar-footer strong{color:var(--text2);font-weight:500;}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;}
+.topbar-title{font-size:18px;font-weight:700;}
+.topbar-actions{display:flex;gap:8px;}
+.btn{padding:8px 16px;border-radius:var(--r);border:1px solid var(--border2);background:var(--surface2);color:var(--text2);font-size:13px;cursor:pointer;font-family:'Tajawal',sans-serif;font-weight:500;transition:all 0.15s;display:flex;align-items:center;gap:6px;}
+.btn:hover{background:var(--surface3);color:var(--text);}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.btn.primary:hover{background:var(--accent2);}
+.btn.danger{background:var(--red-bg);color:var(--red);border-color:rgba(255,92,92,0.2);}
+
+.content{flex:1;padding:28px;overflow-y:auto;}
+.page{display:none;}
+.page.active{display:block;}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 20px;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;right:0;width:60px;height:60px;border-radius:0 var(--r-lg) 0 100%;opacity:0.08;}
+.stat-card.s-all::before{background:var(--accent);}
+.stat-card.s-study::before{background:var(--blue);}
+.stat-card.s-sport::before{background:var(--green);}
+.stat-card.s-break::before{background:var(--amber);}
+.stat-label{font-size:12px;color:var(--text3);margin-bottom:8px;font-weight:500;}
+.stat-val{font-size:30px;font-weight:800;color:var(--text);line-height:1;}
+.stat-sub{font-size:11px;margin-top:6px;}
+.stat-sub.blue{color:var(--blue);}
+.stat-sub.green{color:var(--green);}
+.stat-sub.amber{color:var(--amber);}
+.stat-sub.purple{color:var(--accent2);}
+
+/* SCHEDULE TABLE */
+.sched-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;}
+.sched-hdr{display:grid;grid-template-columns:90px 1fr 90px 40px;gap:0;padding:12px 20px;background:var(--surface2);border-bottom:1px solid var(--border);font-size:12px;font-weight:500;color:var(--text3);letter-spacing:0.5px;}
+.sched-row{display:grid;grid-template-columns:90px 1fr 90px 40px;gap:0;padding:13px 20px;border-bottom:1px solid var(--border);align-items:center;transition:background 0.1s;position:relative;}
+.sched-row:last-child{border-bottom:none;}
+.sched-row:hover{background:var(--surface2);}
+.sched-row.study-r{border-right:3px solid var(--blue);}
+.sched-row.sport-r{border-right:3px solid var(--green);}
+.sched-row.break-r{border-right:3px solid var(--amber);}
+.sched-row .time-cell{font-size:13px;color:var(--text3);font-weight:500;font-variant-numeric:tabular-nums;}
+.cell-in{border:none;background:transparent;font-size:14px;color:var(--text);font-family:'Tajawal',sans-serif;width:100%;outline:none;}
+.cell-in:focus{background:var(--surface3);border-radius:6px;padding:3px 8px;}
+.act-wrap{display:flex;align-items:center;gap:8px;}
+.act-note{font-size:11px;color:var(--text3);display:block;margin-top:2px;}
+.badge{font-size:11px;padding:3px 12px;border-radius:99px;font-weight:500;white-space:nowrap;}
+.b-study{background:var(--blue-bg);color:var(--blue-text);}
+.b-sport{background:var(--green-bg);color:var(--green-text);}
+.b-break{background:var(--amber-bg);color:var(--amber-text);}
+.note-btn{background:none;border:none;cursor:pointer;color:var(--text3);padding:4px 6px;border-radius:6px;font-size:14px;transition:all 0.12s;}
+.note-btn:hover{color:var(--accent2);background:var(--accent-bg);}
+.del-btn{background:none;border:none;cursor:pointer;color:var(--text3);padding:4px 8px;border-radius:6px;font-size:16px;font-family:'Tajawal',sans-serif;transition:all 0.12s;}
+.del-btn:hover{color:var(--red);background:var(--red-bg);}
+
+/* ADD FORM */
+.add-form{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;margin-top:14px;}
+.add-form h3{font-size:14px;font-weight:600;color:var(--text2);margin-bottom:14px;}
+.form-grid{display:grid;grid-template-columns:90px 1fr 100px 1fr auto;gap:10px;align-items:center;}
+.form-inp{border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;font-size:13px;background:var(--surface2);color:var(--text);font-family:'Tajawal',sans-serif;width:100%;outline:none;transition:border-color 0.15s;}
+.form-inp:focus{border-color:var(--accent);}
+.form-inp::placeholder{color:var(--text3);}
+
+/* TIMER PAGE */
+.timer-layout{display:grid;grid-template-columns:1fr 340px;gap:20px;}
+.timer-main{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:36px;display:flex;flex-direction:column;align-items:center;gap:24px;}
+.timer-side{display:flex;flex-direction:column;gap:14px;}
+.timer-act-sel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px;}
+.timer-act-sel h3{font-size:13px;font-weight:600;color:var(--text3);margin-bottom:12px;letter-spacing:0.5px;}
+.timer-act-sel select{width:100%;border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;font-size:13px;background:var(--surface2);color:var(--text);font-family:'Tajawal',sans-serif;outline:none;}
+.timer-act-sel select:focus{border-color:var(--accent);}
+.time-inputs{display:flex;gap:10px;width:100%;}
+.ti{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.ti label{font-size:11px;color:var(--text3);font-weight:500;letter-spacing:0.5px;}
+.ti input{width:100%;text-align:center;padding:12px 8px;border:1px solid var(--border);border-radius:var(--r);font-size:24px;font-weight:700;background:var(--surface2);color:var(--text);font-family:'Tajawal',sans-serif;outline:none;transition:border-color 0.15s;}
+.ti input:focus{border-color:var(--accent);}
+.ring-wrap{position:relative;width:240px;height:240px;}
+.ring-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.t-disp{font-size:42px;font-weight:800;color:var(--text);letter-spacing:2px;font-variant-numeric:tabular-nums;}
+.t-act{font-size:13px;color:var(--text3);margin-top:6px;text-align:center;max-width:160px;line-height:1.4;}
+.timer-btns{display:flex;gap:10px;}
+.t-btn{padding:11px 28px;border-radius:var(--r);border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-size:14px;cursor:pointer;font-family:'Tajawal',sans-serif;font-weight:600;transition:all 0.15s;}
+.t-btn:hover{background:var(--surface3);}
+.t-btn.go{background:var(--accent);color:#fff;border-color:var(--accent);}
+.t-btn.go:hover{background:var(--accent2);}
+.t-btn.rst{background:var(--red-bg);color:var(--red);border-color:rgba(255,92,92,0.25);}
+.done-card{background:var(--green-bg);border:1px solid rgba(62,207,142,0.2);border-radius:var(--r);padding:14px 20px;color:var(--green-text);font-size:14px;font-weight:600;text-align:center;width:100%;display:none;}
+.done-card.show{display:block;}
+.timer-history{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px;flex:1;}
+.timer-history h3{font-size:13px;font-weight:600;color:var(--text3);margin-bottom:12px;letter-spacing:0.5px;}
+.hist-item{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.hist-item:last-child{border-bottom:none;}
+.hist-item .h-act{color:var(--text);}
+.hist-item .h-dur{color:var(--accent2);font-weight:600;font-variant-numeric:tabular-nums;}
+.hist-item .h-time{color:var(--text3);font-size:11px;}
+.empty-hist{color:var(--text3);font-size:13px;text-align:center;padding:20px 0;}
+
+/* STATS PAGE */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;}
+.chart-card h3{font-size:14px;font-weight:600;color:var(--text2);margin-bottom:16px;}
+.bar-rows{display:flex;flex-direction:column;gap:14px;}
+.bar-r{display:flex;flex-direction:column;gap:5px;}
+.bar-meta{display:flex;justify-content:space-between;font-size:13px;}
+.bar-meta .bm-lbl{color:var(--text2);}
+.bar-meta .bm-val{color:var(--text3);}
+.bar-track{height:8px;border-radius:4px;background:var(--surface3);overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;transition:width 0.6s ease;}
+.donut-wrap{display:flex;align-items:center;gap:20px;}
+.legend{display:flex;flex-direction:column;gap:10px;flex:1;}
+.leg-item{display:flex;align-items:center;gap:8px;font-size:13px;}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.leg-lbl{color:var(--text2);}
+.leg-pct{color:var(--text3);margin-right:auto;}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;z-index:999;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r-xl);padding:28px;width:100%;max-width:420px;margin:16px;}
+.modal h3{font-size:17px;font-weight:700;margin-bottom:6px;}
+.modal p{font-size:13px;color:var(--text3);margin-bottom:16px;}
+.modal textarea{width:100%;border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;font-size:14px;background:var(--surface2);color:var(--text);font-family:'Tajawal',sans-serif;resize:vertical;min-height:100px;outline:none;transition:border-color 0.15s;}
+.modal textarea:focus{border-color:var(--accent);}
+.modal-btns{display:flex;gap:10px;margin-top:16px;justify-content:flex-end;}
+
+/* MOBILE */
+@media(max-width:768px){
+  .sidebar{display:none;}
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .timer-layout{grid-template-columns:1fr;}
+  .charts-grid{grid-template-columns:1fr;}
+  .form-grid{grid-template-columns:1fr 1fr;}
+  .form-grid .btn{grid-column:1/-1;}
+  .content{padding:16px;}
+  .topbar{padding:14px 16px;}
+  .mobile-nav{display:flex !important;}
+}
+.mobile-nav{display:none;background:var(--surface);border-top:1px solid var(--border);padding:8px 16px;gap:4px;position:sticky;bottom:0;}
+.mob-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px;border:none;background:transparent;cursor:pointer;border-radius:var(--r);color:var(--text3);font-size:11px;font-family:'Tajawal',sans-serif;transition:all 0.15s;}
+.mob-btn.active{color:var(--accent2);background:var(--accent-bg);}
+.mob-btn svg{width:20px;height:20px;}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="logo">
+      <h1>جدولي</h1>
+      <span>نظام إدارة وقتك</span>
+    </div>
+    <div class="nav-item active" onclick="goPage(&#39;sched&#39;,this)" data-page="sched">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+      الجدول اليومي
+    </div>
+    <div class="nav-item" onclick="goPage(&#39;timer&#39;,this)" data-page="timer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+      التايمر
+    </div>
+    <div class="nav-item" onclick="goPage(&#39;stats&#39;,this)" data-page="stats">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+      الإحصائيات
+    </div>
+    <div class="sidebar-footer">
+      <div class="day-info" id="sidebar-date"><strong>الأحد</strong><br>3 مايو 2026</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="page-title">الجدول اليومي</div>
+      <div class="topbar-actions">
+        <button class="btn" onclick="exportSched()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          تصدير
+        </button>
+        <button class="btn danger" onclick="resetAll()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-3.1"></path></svg>
+          إعادة تعيين
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- SCHEDULE PAGE -->
+      <div id="sched" class="page active">
+        <div class="stats-row" id="mini-stats">
+    <div class="stat-card s-all"><div class="stat-label">إجمالي الأنشطة</div><div class="stat-val">15</div><div class="stat-sub purple">جدول اليوم</div></div>
+    <div class="stat-card s-study"><div class="stat-label">دراسي</div><div class="stat-val">5</div><div class="stat-sub blue">33% من اليوم</div></div>
+    <div class="stat-card s-sport"><div class="stat-label">رياضي</div><div class="stat-val">1</div><div class="stat-sub green">7%</div></div>
+    <div class="stat-card s-break"><div class="stat-label">استراحات</div><div class="stat-val">9</div><div class="stat-sub amber">60%</div></div>
+  </div>
+        <div class="sched-wrap">
+          <div class="sched-hdr">
+            <div>الوقت</div>
+            <div>النشاط</div>
+            <div>النوع</div>
+            <div></div>
+          </div>
+          <div id="sched-list"><div class="sched-row break-r">
+      <div class="time-cell">5:00 ص</div>
+      <div class="act-wrap">
+        <div>
+          <input class="cell-in" value="صلاة الفجر" onchange="sched[0].act=this.value;sv(&#39;jadwali_sched&#39;,sched);updateSel()">
+          
+        </div>
+        <button class="note-btn" onclick="openNote(0)" title="ملاحظة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+      </div>
+      <div><span class="badge b-break">بريك</span></div>
+      <div><button class="del-btn" onclick="delRow(0)">✕</button></div>
+    </div><div class="sched-row study-r">
+      <div class="time-cell">5:15 ص</div>
+      <div class="act-wrap">
+        <div>
+          <input class="cell-in" value="مذاكرة" onchange="sched[1].act=this.value;sv(&#39;jadwali_sched&#39;,sched);updateSel()">
+          <span class="act-note">مراجعة الدروس</span>
+        </div>
+        <button class="note-btn" onclick="openNote(1)" title="ملاحظة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+      </div>
+      <div><span class="badge b-study">دراسي</span></div>
+      <div><button class="del-btn" onclick="delRow(1)">✕</button></div>
+    </div><div class="sched-row break-r">
+      <div class="time-cell">7:00 ص</div>
+      <div class="act-wrap">
+        <div>
+          <input class="cell-in" value="إفطار + استراحة" onchange="sched[2].act=this.value;sv(&#39;jadwali_sched&#39;,sched);updateSel()">
+          
+        </div>
+        <button class="note-btn" onclick="openNote(2)" title="ملاحظة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+      </div>
+      <div><span class="badge b-break">بريك</span></div>
+      <div><button class="del-btn" onclick="delRow(2)">✕</button></div>
+    </div><div class="sched-row study-r">
+      <div class="time-cell">7:30 ص</div>
+      <div class="act-wrap">
+        <div>
+          <input class="cell-in" value="مذاكرة" onchange="sched[3].act=this.value;sv(&#39;jadwali_sched&#39;,sched);updateSel()">
+          <span class="act-note">حل التمارين</span>
+        </div>
+        <button class="note-btn" onclick="openNote(3)" title="ملاحظة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+      </div>
+      <div><span class="badge b-study">دراسي</span></div>
+      <div><button class="del-btn" onclick="delRow(3)">✕</button></div>
+    </div><div class="sched-row break-r">
+      <div class="time-cell">10:00 ص</div>
+      <div class="act-wrap">
+        <div>
+          <input class="cell-in" value="بريك" onchange="sched[4].act=this.value;sv(&#39;jadwali_sched&#39;,sched);updateSel()">
+          <span class="act-note">استراحة قصيرة</span>
+        </div>
+        <button class="note-btn" onclick="openNote(4)" title="ملاحظة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+      </div>
+      <div><span class="badge b-break">بريك</span></div>
+      <div><button class="del-btn" onclick="delRow(4)">✕</button></div>
+    </div><div class="sched-row study-r">
+      <div class="time-cell">10:15 ص</div>
+      <div class="act-wrap">
+        <div>
+          <input class="cell-in" value="مذاكرة" onchange="sched[5].act=this.value;sv(&#39;jadwali_sched&#39;,sched);updateSel()">
+          <span class="act-note">قراءة</span>
+        </div>
+        <button class="note-btn" onclick="openNote(5)" title="ملاحظة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+      </div>
+      <div><span class="badge b-study">دراسي</span></div>
+      <div><button class="del-btn" onclick="delRow(5)">✕</button></div>
+    </div><div class="sched-row break-r">
+      <div class="time-cell">12:00 م</div>
+      <div class="act-wrap">
+        <div>
+          <input class="cell-in" value="صلاة الظهر + غداء" onchange="sched[6].act=this.value;sv(&#39;jadwali_sched&#39;,sched);updateSel()">
+          
+        </div>
+        <button class="note-btn" onclick="openNote(6)" title="ملاحظة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+      </div>
+      <div><span class="badge b-break">بريك</span></div>
+      <div><button class="del-btn" onclick="delRow(6)">✕</button></div>
+    </div><div class="sched-row break-r">
+      <div class="time-cell">1:00 م</div>
+      <div class="act-wrap">
+        <div>
+          <input class="cell-in" value="قيلولة" onchange="sched[7].act=this.value;sv(&#39;jadwali_sched&#39;,sched);updateSel()">
+          
+        </div>
+        <button class="note-btn" onclick="openNote(7)" title="ملاحظة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+      </div>
+      <div><span class="badge b-break">بريك</span></div>
+      <div><button class="del-btn" onclick="delRow(7)">✕</button></div>
+    </div><div class="sched-row sport-r">
+      <div class="time-cell">3:00 م</div>
+      <div class="act-wrap">
+        <div>
+          <input class="cell-in" value="رياضة" onchange="sched[8].act=this.value;sv(&#39;jadwali_sched&#39;,sched);updateSel()">
+          <span class="act-note">تمارين</span>
+        </div>
+        <button class="note-btn" onclick="openNote(8)" title="ملاحظة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+      </div>
+      <div><span class="badge b-sport">رياضي</span></div>
+      <div><button class="del-btn" onclick="delRow(8)">✕</button></div>
+    </div><div class="sched-row break-r">
+      <div class="time-cell">4:00 م</div>
+      <div class="act-wrap">
+        <div>
+          <input class="cell-in" value="صلاة العصر + استراحة" onchange="sched[9].act=this.value;sv(&#39;jadwali_sched&#39;,sched);updateSel()">
+          
+        </div>
+        <button class="note-btn" onclick="openNote(9)" title="ملاحظة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+      </div>
+      <div><span class="badge b-break">بريك</span></div>
+      <div><button class="del-btn" onclick="delRow(9)">✕</button></div>
+    </div><div class="sched-row study-r">
+      <div class="time-cell">5:00 م</div>
+      <div class="act-wrap">
+        <div>
+          <input class="cell-in" value="مذاكرة" onchange="sched[10].act=this.value;sv(&#39;jadwali_sched&#39;,sched);updateSel()">
+          <span class="act-note">مراجعة</span>
+        </div>
+        <button class="note-btn" onclick="openNote(10)" title="ملاحظة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+      </div>
+      <div><span class="badge b-study">دراسي</span></div>
+      <div><button class="del-btn" onclick="delRow(10)">✕</button></div>
+    </div><div class="sched-row break-r">
+      <div class="time-cell">7:00 م</div>
+      <div class="act-wrap">
+        <div>
+          <input class="cell-in" value="صلاة المغرب + عشاء" onchange="sched[11].act=this.value;sv(&#39;jadwali_sched&#39;,sched);updateSel()">
+          
+        </div>
+        <button class="note-btn" onclick="openNote(11)" title="ملاحظة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+      </div>
+      <div><span class="badge b-break">بريك</span></div>
+      <div><button class="del-btn" onclick="delRow(11)">✕</button></div>
+    </div><div class="sched-row study-r">
+      <div class="time-cell">8:00 م</div>
+      <div class="act-wrap">
+        <div>
+          <input class="cell-in" value="مذاكرة" onchange="sched[12].act=this.value;sv(&#39;jadwali_sched&#39;,sched);updateSel()">
+          <span class="act-note">تلخيص</span>
+        </div>
+        <button class="note-btn" onclick="openNote(12)" title="ملاحظة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+      </div>
+      <div><span class="badge b-study">دراسي</span></div>
+      <div><button class="del-btn" onclick="delRow(12)">✕</button></div>
+    </div><div class="sched-row break-r">
+      <div class="time-cell">10:00 م</div>
+      <div class="act-wrap">
+        <div>
+          <input class="cell-in" value="وقت حر" onchange="sched[13].act=this.value;sv(&#39;jadwali_sched&#39;,sched);updateSel()">
+          
+        </div>
+        <button class="note-btn" onclick="openNote(13)" title="ملاحظة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+      </div>
+      <div><span class="badge b-break">بريك</span></div>
+      <div><button class="del-btn" onclick="delRow(13)">✕</button></div>
+    </div><div class="sched-row break-r">
+      <div class="time-cell">11:00 م</div>
+      <div class="act-wrap">
+        <div>
+          <input class="cell-in" value="نوم" onchange="sched[14].act=this.value;sv(&#39;jadwali_sched&#39;,sched);updateSel()">
+          
+        </div>
+        <button class="note-btn" onclick="openNote(14)" title="ملاحظة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+      </div>
+      <div><span class="badge b-break">بريك</span></div>
+      <div><button class="del-btn" onclick="delRow(14)">✕</button></div>
+    </div></div>
+        </div>
+        <div class="add-form">
+          <h3>إضافة نشاط</h3>
+          <div class="form-grid">
+            <input class="form-inp" id="n-t" placeholder="الوقت">
+            <input class="form-inp" id="n-a" placeholder="اسم النشاط">
+            <select class="form-inp" id="n-ty">
+              <option value="study">دراسي</option>
+              <option value="sport">رياضي</option>
+              <option value="break">بريك</option>
+            </select>
+            <input class="form-inp" id="n-note" placeholder="ملاحظة (اختياري)">
+            <button class="btn primary" onclick="addRow()">+ أضف</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIMER PAGE -->
+      <div id="timer" class="page">
+        <div class="timer-layout">
+          <div class="timer-main">
+            <div class="time-inputs" style="width:100%">
+              <div class="ti"><label>ساعات</label><input type="number" id="th" min="0" max="23" value="0"></div>
+              <div class="ti"><label>دقائق</label><input type="number" id="tm" min="0" max="59" value="25"></div>
+              <div class="ti"><label>ثواني</label><input type="number" id="ts" min="0" max="59" value="0"></div>
+            </div>
+            <div class="ring-wrap">
+              <svg width="240" height="240" style="position:absolute;top:0;left:0;">
+                <circle cx="120" cy="120" r="108" fill="none" stroke="#2a2a3a" stroke-width="10"></circle>
+                <circle id="prog" cx="120" cy="120" r="108" fill="none" stroke="#6c63ff" stroke-width="10" stroke-dasharray="679" stroke-dashoffset="679" stroke-linecap="round" style="transform-origin:center;transform:rotate(-90deg);transition:stroke-dashoffset 0.8s;"></circle>
+              </svg>
+              <div class="ring-face">
+                <div class="t-disp" id="t-disp">00:25:00</div>
+                <div class="t-act" id="t-act">حدد وقتاً للبدء</div>
+              </div>
+            </div>
+            <div class="timer-btns">
+              <button class="t-btn go" id="btn-start" onclick="startT()">ابدأ</button>
+              <button class="t-btn" id="btn-pause" style="display:none" onclick="pauseT()">وقف مؤقت</button>
+              <button class="t-btn rst" onclick="resetT()">إعادة</button>
+            </div>
+            <div class="done-card" id="done-card">انتهى الوقت! أحسنت 🎉</div>
+          </div>
+          <div class="timer-side">
+            <div class="timer-act-sel">
+              <h3>اختر نشاط</h3>
+              <select id="act-sel" onchange="pickAct()"><option value="">من الجدول...</option><option value="0">5:00 ص — صلاة الفجر</option><option value="1">5:15 ص — مذاكرة</option><option value="2">7:00 ص — إفطار + استراحة</option><option value="3">7:30 ص — مذاكرة</option><option value="4">10:00 ص — بريك</option><option value="5">10:15 ص — مذاكرة</option><option value="6">12:00 م — صلاة الظهر + غداء</option><option value="7">1:00 م — قيلولة</option><option value="8">3:00 م — رياضة</option><option value="9">4:00 م — صلاة العصر + استراحة</option><option value="10">5:00 م — مذاكرة</option><option value="11">7:00 م — صلاة المغرب + عشاء</option><option value="12">8:00 م — مذاكرة</option><option value="13">10:00 م — وقت حر</option><option value="14">11:00 م — نوم</option></select>
+            </div>
+            <div class="timer-history">
+              <h3>آخر الجلسات</h3>
+              <div id="hist-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATS PAGE -->
+      <div id="stats" class="page">
+        <div class="stats-row" id="stats-cards"></div>
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3>توزيع الأنشطة</h3>
+            <div class="bar-rows" id="bar-rows"></div>
+          </div>
+          <div class="chart-card">
+            <h3>النسب المئوية</h3>
+            <div class="donut-wrap">
+              <svg width="120" height="120" viewBox="0 0 120 120" id="donut-svg"></svg>
+              <div class="legend" id="donut-legend"></div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>سجل جلسات التايمر</h3>
+          <div id="full-hist"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MOBILE NAV -->
+    <div class="mobile-nav">
+      <button class="mob-btn active" onclick="goPageMob(&#39;sched&#39;,this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        الجدول
+      </button>
+      <button class="mob-btn" onclick="goPageMob(&#39;timer&#39;,this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        التايمر
+      </button>
+      <button class="mob-btn" onclick="goPageMob(&#39;stats&#39;,this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+        الإحصائيات
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTE MODAL -->
+<div class="modal-bg" id="note-bg">
+  <div class="modal">
+    <h3 id="note-title">ملاحظة النشاط</h3>
+    <p id="note-sub"></p>
+    <textarea id="note-ta" placeholder="اكتب ملاحظتك هنا..."></textarea>
+    <div class="modal-btns">
+      <button class="btn" onclick="closeNote()">إلغاء</button>
+      <button class="btn primary" onclick="saveNote()">حفظ الملاحظة</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DEF=[
+  {time:"5:00 ص",act:"صلاة الفجر",note:"",type:"break"},
+  {time:"5:15 ص",act:"مذاكرة",note:"مراجعة الدروس",type:"study"},
+  {time:"7:00 ص",act:"إفطار + استراحة",note:"",type:"break"},
+  {time:"7:30 ص",act:"مذاكرة",note:"حل التمارين",type:"study"},
+  {time:"10:00 ص",act:"بريك",note:"استراحة قصيرة",type:"break"},
+  {time:"10:15 ص",act:"مذاكرة",note:"قراءة",type:"study"},
+  {time:"12:00 م",act:"صلاة الظهر + غداء",note:"",type:"break"},
+  {time:"1:00 م",act:"قيلولة",note:"",type:"break"},
+  {time:"3:00 م",act:"رياضة",note:"تمارين",type:"sport"},
+  {time:"4:00 م",act:"صلاة العصر + استراحة",note:"",type:"break"},
+  {time:"5:00 م",act:"مذاكرة",note:"مراجعة",type:"study"},
+  {time:"7:00 م",act:"صلاة المغرب + عشاء",note:"",type:"break"},
+  {time:"8:00 م",act:"مذاكرة",note:"تلخيص",type:"study"},
+  {time:"10:00 م",act:"وقت حر",note:"",type:"break"},
+  {time:"11:00 م",act:"نوم",note:"",type:"break"},
+];
+
+function ld(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
+let sched=ld('jadwali_sched',JSON.parse(JSON.stringify(DEF)));
+let history=ld('jadwali_hist',[]);
+let noteIdx=-1;
+
+const pad=n=>String(n).padStart(2,'0');
+const fmtT=s=>`${pad(Math.floor(s/3600))}:${pad(Math.floor(s%3600/60))}:${pad(s%60)}`;
+const fmtDur=s=>{const m=Math.floor(s/60);const sec=s%60;return m>0?`${m}د ${sec}ث`:`${sec}ث`;};
+
+function badge(t){
+  const m={study:['b-study','دراسي'],sport:['b-sport','رياضي'],break:['b-break','بريك']};
+  const [c,l]=m[t]||['b-break','بريك'];
+  return `<span class="badge ${c}">${l}</span>`;
+}
+
+function renderSched(){
+  const list=document.getElementById('sched-list');
+  list.innerHTML='';
+  sched.forEach((r,i)=>{
+    const d=document.createElement('div');
+    d.className=`sched-row ${r.type}-r`;
+    d.innerHTML=`
+      <div class="time-cell">${r.time}</div>
+      <div class="act-wrap">
+        <div>
+          <input class="cell-in" value="${esc(r.act)}" onchange="sched[${i}].act=this.value;sv('jadwali_sched',sched);updateSel()"/>
+          ${r.note?`<span class="act-note">${esc(r.note)}</span>`:''}
+        </div>
+        <button class="note-btn" onclick="openNote(${i})" title="ملاحظة">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+      </div>
+      <div>${badge(r.type)}</div>
+      <div><button class="del-btn" onclick="delRow(${i})">✕</button></div>
+    `;
+    list.appendChild(d);
+  });
+  updateSel();
+  renderMiniStats();
+}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+
+function delRow(i){if(confirm('تحذف؟')){sched.splice(i,1);sv('jadwali_sched',sched);renderSched();}}
+
+function addRow(){
+  const t=document.getElementById('n-t').value.trim();
+  const a=document.getElementById('n-a').value.trim();
+  if(!t||!a){alert('اكتب الوقت والنشاط');return;}
+  sched.push({time:t,act:a,note:document.getElementById('n-note').value.trim(),type:document.getElementById('n-ty').value});
+  sv('jadwali_sched',sched);
+  ['n-t','n-a','n-note'].forEach(id=>document.getElementById(id).value='');
+  renderSched();
+}
+
+function renderMiniStats(){
+  const study=sched.filter(r=>r.type==='study').length;
+  const sport=sched.filter(r=>r.type==='sport').length;
+  const brk=sched.filter(r=>r.type==='break').length;
+  const total=sched.length||1;
+  document.getElementById('mini-stats').innerHTML=`
+    <div class="stat-card s-all"><div class="stat-label">إجمالي الأنشطة</div><div class="stat-val">${sched.length}</div><div class="stat-sub purple">جدول اليوم</div></div>
+    <div class="stat-card s-study"><div class="stat-label">دراسي</div><div class="stat-val">${study}</div><div class="stat-sub blue">${Math.round(study/total*100)}% من اليوم</div></div>
+    <div class="stat-card s-sport"><div class="stat-label">رياضي</div><div class="stat-val">${sport}</div><div class="stat-sub green">${Math.round(sport/total*100)}%</div></div>
+    <div class="stat-card s-break"><div class="stat-label">استراحات</div><div class="stat-val">${brk}</div><div class="stat-sub amber">${Math.round(brk/total*100)}%</div></div>
+  `;
+}
+
+function renderStats(){
+  const study=sched.filter(r=>r.type==='study').length;
+  const sport=sched.filter(r=>r.type==='sport').length;
+  const brk=sched.filter(r=>r.type==='break').length;
+  const total=sched.length||1;
+  document.getElementById('stats-cards').innerHTML=`
+    <div class="stat-card s-all"><div class="stat-label">إجمالي الأنشطة</div><div class="stat-val">${total}</div></div>
+    <div class="stat-card s-study"><div class="stat-label">جلسات دراسية</div><div class="stat-val">${study}</div><div class="stat-sub blue">${Math.round(study/total*100)}%</div></div>
+    <div class="stat-card s-sport"><div class="stat-label">رياضة</div><div class="stat-val">${sport}</div><div class="stat-sub green">${Math.round(sport/total*100)}%</div></div>
+    <div class="stat-card s-break"><div class="stat-label">استراحات</div><div class="stat-val">${brk}</div><div class="stat-sub amber">${Math.round(brk/total*100)}%</div></div>
+  `;
+  document.getElementById('bar-rows').innerHTML=`
+    <div class="bar-r"><div class="bar-meta"><span class="bm-lbl">دراسي</span><span class="bm-val">${study} نشاط</span></div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(study/total*100)}%;background:var(--blue);"></div></div></div>
+    <div class="bar-r"><div class="bar-meta"><span class="bm-lbl">رياضي</span><span class="bm-val">${sport} نشاط</span></div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(sport/total*100)}%;background:var(--green);"></div></div></div>
+    <div class="bar-r"><div class="bar-meta"><span class="bm-lbl">استراحة</span><span class="bm-val">${brk} نشاط</span></div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(brk/total*100)}%;background:var(--amber);"></div></div></div>
+  `;
+  drawDonut(study,sport,brk,total);
+  renderHistFull();
+}
+
+function drawDonut(study,sport,brk,total){
+  const cx=60,cy=60,r=48,circ=2*Math.PI*r;
+  const segs=[
+    {val:study,color:'#4a9eff',label:'دراسي'},
+    {val:sport,color:'#3ecf8e',label:'رياضي'},
+    {val:brk,color:'#f5a623',label:'استراحة'},
+  ];
+  let offset=0;
+  let paths='';
+  let legend='';
+  segs.forEach(s=>{
+    const pct=s.val/total;
+    const len=pct*circ;
+    paths+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s.color}" stroke-width="18" stroke-dasharray="${len} ${circ-len}" stroke-dashoffset="${-offset}" style="transform-origin:center;transform:rotate(-90deg);"/>`;
+    offset+=len;
+    legend+=`<div class="leg-item"><div class="leg-dot" style="background:${s.color}"></div><span class="leg-lbl">${s.label}</span><span class="leg-pct">${Math.round(pct*100)}%</span></div>`;
+  });
+  document.getElementById('donut-svg').innerHTML=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#2a2a3a" stroke-width="18"/>${paths}`;
+  document.getElementById('donut-legend').innerHTML=legend;
+}
+
+function renderHist(){
+  const el=document.getElementById('hist-list');
+  const last=history.slice(-5).reverse();
+  if(!last.length){el.innerHTML='<div class="empty-hist">لا توجد جلسات بعد</div>';return;}
+  el.innerHTML=last.map(h=>`
+    <div class="hist-item">
+      <div>
+        <div class="h-act">${esc(h.act)}</div>
+        <div class="h-time">${h.at}</div>
+      </div>
+      <div class="h-dur">${fmtDur(h.dur)}</div>
+    </div>
+  `).join('');
+}
+
+function renderHistFull(){
+  const el=document.getElementById('full-hist');
+  if(!history.length){el.innerHTML='<div class="empty-hist">لا توجد جلسات مسجلة</div>';return;}
+  el.innerHTML=history.slice().reverse().map(h=>`
+    <div class="hist-item">
+      <div><div class="h-act">${esc(h.act)}</div><div class="h-time">${h.at}</div></div>
+      <div class="h-dur">${fmtDur(h.dur)}</div>
+    </div>
+  `).join('');
+}
+
+function openNote(i){
+  noteIdx=i;
+  document.getElementById('note-title').textContent='ملاحظة: '+sched[i].act;
+  document.getElementById('note-sub').textContent=sched[i].time;
+  document.getElementById('note-ta').value=sched[i].note||'';
+  document.getElementById('note-bg').classList.add('open');
+  setTimeout(()=>document.getElementById('note-ta').focus(),100);
+}
+function closeNote(){document.getElementById('note-bg').classList.remove('open');noteIdx=-1;}
+function saveNote(){if(noteIdx>=0){sched[noteIdx].note=document.getElementById('note-ta').value;sv('jadwali_sched',sched);renderSched();}closeNote();}
+document.getElementById('note-bg').addEventListener('click',e=>{if(e.target===e.currentTarget)closeNote();});
+
+function updateSel(){
+  const sel=document.getElementById('act-sel');
+  const cur=sel.value;
+  sel.innerHTML='<option value="">من الجدول...</option>';
+  sched.forEach((r,i)=>{
+    const o=document.createElement('option');
+    o.value=i;o.textContent=`${r.time} — ${r.act}`;
+    sel.appendChild(o);
+  });
+  sel.value=cur;
+}
+
+function goPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  const titles={sched:'الجدول اليومي',timer:'التايمر',stats:'الإحصائيات'};
+  document.getElementById('page-title').textContent=titles[id]||'';
+  if(id==='stats')renderStats();
+  if(id==='timer')renderHist();
+}
+function goPageMob(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.mob-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  const titles={sched:'الجدول اليومي',timer:'التايمر',stats:'الإحصائيات'};
+  document.getElementById('page-title').textContent=titles[id]||'';
+  if(id==='stats')renderStats();
+  if(id==='timer')renderHist();
+}
+
+function exportSched(){
+  let txt='الجدول اليومي\n'+('='.repeat(30))+'\n\n';
+  sched.forEach(r=>{txt+=`${r.time} | ${r.act}${r.note?' ('+r.note+')':''} | ${r.type==='study'?'دراسي':r.type==='sport'?'رياضي':'بريك'}\n`;});
+  const a=document.createElement('a');
+  a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(txt);
+  a.download='جدولي.txt';a.click();
+}
+
+function resetAll(){
+  if(confirm('تعيد الجدول للافتراضي؟ سيتم حذف كل التعديلات.')){
+    sched=JSON.parse(JSON.stringify(DEF));
+    sv('jadwali_sched',sched);
+    renderSched();
+  }
+}
+
+let tiv=null,rem=0,tot=0,running=false,sessStart=0,sessAct='جلسة عمل';
+function updDisp(){
+  document.getElementById('t-disp').textContent=fmtT(rem);
+  const pct=tot>0?(1-rem/tot):0;
+  document.getElementById('prog').style.strokeDashoffset=679*(1-pct);
+}
+function pickAct(){
+  const v=document.getElementById('act-sel').value;
+  if(!v)return;
+  const r=sched[parseInt(v)];
+  sessAct=r.act;
+  document.getElementById('t-act').textContent=r.act+(r.note?' — '+r.note:'');
+}
+function getCustom(){
+  const h=parseInt(document.getElementById('th').value)||0;
+  const m=parseInt(document.getElementById('tm').value)||0;
+  const s=parseInt(document.getElementById('ts').value)||0;
+  return h*3600+m*60+s;
+}
+function startT(){
+  if(!running){
+    if(rem===0){tot=getCustom();rem=tot;}
+    if(rem<=0)return;
+    sessStart=tot-rem;
+    const v=document.getElementById('act-sel').value;
+    if(v)sessAct=sched[parseInt(v)].act;
+    running=true;
+    document.getElementById('btn-start').style.display='none';
+    document.getElementById('btn-pause').style.display='';
+    document.getElementById('done-card').classList.remove('show');
+    tiv=setInterval(()=>{
+      if(rem>0){rem--;updDisp();}
+      else{
+        clearInterval(tiv);running=false;
+        document.getElementById('btn-start').style.display='';
+        document.getElementById('btn-pause').style.display='none';
+        document.getElementById('done-card').classList.add('show');
+        const dur=tot;
+        const now=new Date();
+        const at=`${now.getHours()}:${pad(now.getMinutes())}`;
+        history.push({act:sessAct,dur,at});
+        if(history.length>50)history.shift();
+        sv('jadwali_hist',history);
+        renderHist();
+        try{new Notification('جدولي — انتهى الوقت!',{body:sessAct});}catch(e){}
+      }
+    },1000);
+    updDisp();
+  }
+}
+function pauseT(){
+  if(running){clearInterval(tiv);running=false;document.getElementById('btn-start').style.display='';document.getElementById('btn-pause').style.display='none';}
+}
+function resetT(){
+  clearInterval(tiv);running=false;rem=0;tot=0;updDisp();
+  document.getElementById('btn-start').style.display='';
+  document.getElementById('btn-pause').style.display='none';
+  document.getElementById('done-card').classList.remove('show');
+  document.getElementById('t-act').textContent='حدد وقتاً للبدء';
+}
+
+const days=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const months=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const now=new Date();
+document.getElementById('sidebar-date').innerHTML=`<strong>${days[now.getDay()]}</strong><br>${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+try{if(Notification.permission==='default')Notification.requestPermission();}catch(e){}
+renderSched();
+</script>
+
+
+</body></html>
